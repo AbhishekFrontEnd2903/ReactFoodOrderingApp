@@ -1,0 +1,3 @@
+config driven ui, different data for different location (in case of swiggy based on location)
+controlling your data based on config
+27 mins remaining of fiunding the path

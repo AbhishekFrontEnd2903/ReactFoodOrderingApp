@@ -2,25 +2,29 @@ import { useEffect, useState } from "react";
 import ShimmerUi from "./ShimmerUi";
 import { RESTAURANT_IMG_CDN } from "../utils/constants";
 import { useParams } from "react-router-dom";
+import useCustomApi from "../utils/customHooks/useCustomApi";
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState(null);
+  // const [resInfo, setResInfo] = useState(null); moved this code to custom hook
   //   console.log("resinfo", resInfo);
-  const { id } = useParams();
-
-  useEffect(() => {
-    fetchMenu();
-  }, []);
-  const fetchMenu = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.970021&lng=77.746851&restaurantId=" +
-        { id } +
-        "&catalog_qa=undefined&submitAction=ENTER"
-    );
-    const menuData = await data.json();
-    console.log("menudata", menuData);
-    setResInfo(menuData.data);
-  };
+  const params = useParams();
+  const ResParam = params.id;
+  const resInfo = useCustomApi(ResParam);
+  // moved this code to custom hook start
+  // useEffect(() => {
+  //   fetchMenu();
+  // }, []);
+  // const fetchMenu = async () => {
+  //   console.log("hhhhhhhhhhh", ResParam);
+  //   const data = await fetch(
+  //     "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.970021&lng=77.746851&restaurantId=" +
+  //       ResParam
+  //   );
+  //   const menuData = await data.json();
+  //   console.log("menudata", menuData);
+  //   setResInfo(menuData.data);
+  // };
+  // moved this code to custom hook end
   if (resInfo == null) return <ShimmerUi />;
   const {
     name,
@@ -31,7 +35,7 @@ const RestaurantMenu = () => {
   } = resInfo?.cards?.[2]?.card?.card?.info;
   console.log("qqqqqqqqqq", resInfo?.cards?.[2]?.card?.card?.info);
   const { itemCards } =
-    resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
+    resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
   console.log("menuItems", itemCards);
 
   return (
